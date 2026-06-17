@@ -1,0 +1,6 @@
+{
+  "name": "MyNotification",
+  "description": "A privacy-first native notification management system for Android to block, filter, schedule, and intelligently control device alerts.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
