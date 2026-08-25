@@ -15,7 +15,7 @@ data class NotificationWithVerdict(
     val senderDigits: String?,
     val channelId: String?,
     val androidCategory: String?,
-    val importance: Int?,
+    val importance: Int,
     val signalClass: String,
     val contentHash: String,
     val firstSeenAt: Long,

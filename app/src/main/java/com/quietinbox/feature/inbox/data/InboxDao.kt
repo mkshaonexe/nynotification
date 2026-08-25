@@ -27,7 +27,7 @@ interface InboxDao {
             n.updateCount, n.wasRateLimited, n.isSeen, n.isStarred, n.removalReason,
             fd.action AS firewallAction, fd.ruleId AS firewallRuleId, fd.ruleLabel AS firewallRuleLabel
         FROM notifications n
-        LEFT JOIN firewall_decisions fd ON n.id = fd.notificationId
+        LEFT JOIN firewall_decisions fd ON n.sbnKey = fd.sbnKey
         WHERE (:stateFilter = 'ALL' 
                OR (:stateFilter = 'UNSEEN' AND n.isSeen = 0)
                OR (:stateFilter = 'SEEN' AND n.isSeen = 1)
