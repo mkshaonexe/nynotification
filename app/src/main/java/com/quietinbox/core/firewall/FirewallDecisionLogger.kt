@@ -62,7 +62,7 @@ class FirewallDecisionLogger(
 
                 if (batch.isNotEmpty()) {
                     try {
-                        statsDao.insertFirewallDecisions(batch)
+                        statsDao.logDecisions(batch)
                     } catch (_: Exception) {
                         // Resilient: failure in logging shouldn't crash pipeline
                     }
