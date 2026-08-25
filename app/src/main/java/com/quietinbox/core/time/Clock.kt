@@ -10,11 +10,13 @@ import javax.inject.Singleton
  */
 interface Clock {
     fun now(): Long
+    fun nowEpochMs(): Long = now()
     fun elapsedRealtime(): Long
 }
 
 @Singleton
 class DefaultClock @Inject constructor() : Clock {
     override fun now(): Long = System.currentTimeMillis()
+    override fun nowEpochMs(): Long = System.currentTimeMillis()
     override fun elapsedRealtime(): Long = SystemClock.elapsedRealtime()
 }

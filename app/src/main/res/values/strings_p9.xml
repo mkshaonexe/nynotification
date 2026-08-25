@@ -104,4 +104,10 @@
 
     <!-- Licenses Screen -->
     <string name="licenses_title">Open Source Licenses</string>
+
+    <!-- Digest Notification -->
+    <string name="digest_notification_title">Focus Summary</string>
+    <string name="digest_notification_body">%1$d notifications received while Quiet Mode was active. %2$d from allowed senders.</string>
+    <string name="digest_channel_name">Quiet Inbox Digest</string>
+    <string name="digest_channel_desc">Daily and scheduled focus summary notifications</string>
 </resources>

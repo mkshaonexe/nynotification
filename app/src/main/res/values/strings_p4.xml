@@ -1,3 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <!-- Phase 4 Strings (Inbox) -->
+    <!-- Inbox Search & Filters -->
+    <string name="inbox_search_hint">Search notifications, senders, or numbers…</string>
+    <string name="inbox_search_icon">Search</string>
+    <string name="inbox_filter_all">All</string>
+    <string name="inbox_filter_unseen">Unseen</string>
+    <string name="inbox_filter_seen">Seen</string>
+    <string name="inbox_filter_starred">Starred</string>
+    <string name="inbox_filter_app">Filter by App</string>
+    <string name="inbox_filter_select_app">Select App to Filter</string>
+    <string name="inbox_filter_all_apps">All Apps</string>
+    <string name="inbox_clear_filters">Clear filters</string>
+
+    <!-- Empty States -->
+    <string name="inbox_empty_no_access_title">Notification Access Required</string>
+    <string name="inbox_empty_no_access_desc">Quiet Inbox cannot read notifications until permission is granted in Settings.</string>
+    <string name="inbox_empty_no_access_action">Grant Access</string>
+    <string name="inbox_empty_no_data_title">Inbox is Empty</string>
+    <string name="inbox_empty_no_data_desc">Notifications will appear here as they arrive on your device.</string>
+    <string name="inbox_empty_search_title">No Matches Found</string>
+    <string name="inbox_empty_search_desc">No notifications found matching \"%1$s\".</string>
+    <string name="inbox_empty_filter_title">No Filtered Results</string>
+    <string name="inbox_empty_filter_desc">No notifications match the active filter criteria.</string>
+
+    <!-- Row Actions & Badges -->
+    <string name="inbox_action_star">Star</string>
+    <string name="inbox_action_delete">Delete</string>
+    <string name="inbox_cd_silenced_badge">Silenced by Quiet Inbox</string>
+    <string name="inbox_badge_silenced">Silenced</string>
+    <string name="inbox_cd_app_icon">%1$s icon</string>
+    <string name="inbox_selected_count">%1$d selected</string>
+
+    <!-- Detail Sheet -->
+    <string name="inbox_detail_action_open_app">Open App</string>
+    <string name="inbox_detail_action_mute_app">Mute App</string>
+    <string name="inbox_detail_action_always_allow">Always Allow Sender</string>
+    <string name="inbox_detail_section_firewall">Delivery Decision</string>
+    <string name="inbox_detail_section_info">Notification Details</string>
 </resources>

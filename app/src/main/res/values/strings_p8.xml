@@ -1,3 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <!-- Phase 8 Strings (Onboarding, Permissions & Health) -->
+    <!-- Onboarding -->
+    <string name="onboarding_title_1">Your phone stops buzzing.\nNothing gets lost.</string>
+    <string name="onboarding_subtitle_1">Quiet Inbox silences unwanted notifications while securely capturing everything to a private archive on your device.</string>
+    <string name="onboarding_btn_get_started">Get Started</string>
+
+    <string name="onboarding_title_2">Turn on Notification Access</string>
+    <string name="onboarding_disclosure_title">Prominent Disclosure</string>
+    <string name="onboarding_disclosure_body">Quiet Inbox requires Notification Access to filter interruptions and save messages to your local archive. Notification content is processed strictly on this device and is never transmitted over the internet.</string>
+    <string name="onboarding_access_granted">Notification access is granted</string>
+    <string name="onboarding_waiting_for_access">Waiting for permission to be enabled in Settings…</string>
+    <string name="onboarding_btn_grant_access">Enable Notification Access</string>
+
+    <string name="onboarding_show_me_how_generic">Show setup instructions</string>
+    <string name="onboarding_show_me_how">Show setup instructions for %1$s</string>
+    <string name="onboarding_oem_samsung">Go to Settings → Apps → Special app access → Notification access → Turn on Quiet Inbox.</string>
+    <string name="onboarding_oem_xiaomi">Go to Settings → Privacy protection → Special permissions → Notification access → Enable Quiet Inbox (and allow Autostart if prompted).</string>
+    <string name="onboarding_oem_oppo">Go to Settings → Apps → Special app access → Device &amp; app notifications → Enable Quiet Inbox.</string>
+    <string name="onboarding_oem_vivo">Go to Settings → More settings → Applications → Special app access → Notification access → Enable Quiet Inbox.</string>
+    <string name="onboarding_oem_huawei">Go to Settings → Apps → Special access → Notification access → Enable Quiet Inbox.</string>
+    <string name="onboarding_oem_stock">Go to Settings → Apps → Special app access → Notification access → Enable Quiet Inbox.</string>
+
+    <string name="onboarding_title_3">Who always gets through?</string>
+    <string name="onboarding_subtitle_3">Select essential communication apps to always allow through the filter.</string>
+    <string name="onboarding_btn_continue">Continue</string>
+    <string name="onboarding_btn_skip">Skip for now</string>
+
+    <string name="onboarding_app_phone">Phone</string>
+    <string name="onboarding_app_messages">Messages</string>
+    <string name="onboarding_app_clock">Clock &amp; Alarms</string>
+
+    <string name="onboarding_title_4">Quiet Mode is on.\nEverything is being saved.</string>
+    <string name="onboarding_subtitle_4">Your filter is active. Explore your inbox anytime or adjust your rules in settings.</string>
+    <string name="onboarding_btn_open_home">Open Quiet Inbox</string>
+
+    <!-- Permissions & Health -->
+    <string name="permissions_health_title">Permissions &amp; Health</string>
+    <string name="perm_listener_title">Notification Access</string>
+    <string name="perm_listener_desc">Allows reading and filtering incoming notifications on device</string>
+    <string name="perm_listener_fix">Grant Access</string>
+
+    <string name="perm_post_notif_title">Post Notifications</string>
+    <string name="perm_post_notif_desc">Allows showing quiet digest summaries and active status notifications</string>
+    <string name="perm_post_notif_fix">Allow</string>
+
+    <string name="perm_battery_title">Ignore Battery Optimization</string>
+    <string name="perm_battery_desc">Prevents Android from killing the background listener service</string>
+    <string name="perm_battery_fix">Exempt</string>
+
+    <string name="perm_autostart_title">OEM Autostart (%1$s)</string>
+    <string name="perm_autostart_desc">Recommended on %1$s devices to prevent system process killing</string>
+    <string name="perm_autostart_fix">Setup</string>
+
+    <string name="perm_service_connection_title">Listener Connection</string>
+    <string name="perm_service_connection_desc">Live status of the notification listener service</string>
+    <string name="perm_service_reconnect_btn">Reconnect</string>
+
+    <string name="permissions_status_active">Active</string>
+    <string name="permissions_status_granted">Granted</string>
+    <string name="permissions_status_missing">Missing</string>
+    <string name="permissions_status_enabled">Enabled</string>
+    <string name="permissions_status_disabled">Disabled</string>
+    <string name="permissions_status_stale">Stale (No events 24h)</string>
+    <string name="permissions_status_disconnected">Disconnected</string>
+    <string name="permissions_status_unknown">Unknown</string>
+
+    <string name="perm_last_capture_title">Last Capture</string>
+    <string name="perm_total_captured_title">Total Captured</string>
+    <string name="perm_total_errors_title">Errors</string>
+
+    <string name="perm_autostart_dialog_title">Autostart Configuration</string>
+    <string name="perm_autostart_dialog_instructions">To ensure Quiet Inbox continues capturing notifications reliably, please enable Autostart or Background App Launch in your device battery/security settings.</string>
+
+    <string name="oem_notice_title">Reliability Notice (%1$s)</string>
+    <string name="oem_notice_desc">Your %1$s device has aggressive background restrictions. Enabling autostart ensures uninterrupted notification capture.</string>
+    <string name="oem_notice_dismiss">Dismiss</string>
+    <string name="oem_notice_action">Configure</string>
+
+    <!-- Navigation / Accessibility -->
+    <string name="cd_back">Back</string>
+    <string name="cd_expand">Expand</string>
+    <string name="cd_collapse">Collapse</string>
+    <string name="cd_step_indicator">Step %1$d of %2$d</string>
 </resources>

@@ -1,12 +1,9 @@
 package com.quietinbox.navigation
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Construction
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Inbox
 import androidx.compose.material.icons.filled.Settings
@@ -27,9 +24,17 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
-import androidx.navigation.toRoute
-import com.quietinbox.ui.components.EmptyState
-import com.quietinbox.ui.components.SectionHeader
+import com.quietinbox.feature.home.HomeScreen
+import com.quietinbox.feature.inbox.InboxScreen
+import com.quietinbox.feature.onboarding.OnboardingScreen
+import com.quietinbox.feature.permissions.PermissionsHealthScreen
+import com.quietinbox.feature.schedules.ScheduleEditScreen
+import com.quietinbox.feature.schedules.SchedulesScreen
+import com.quietinbox.feature.settings.AboutScreen
+import com.quietinbox.feature.settings.AppLockScreen
+import com.quietinbox.feature.settings.PrivacyScreen
+import com.quietinbox.feature.settings.SettingsScreen
+import com.quietinbox.feature.settings.StorageRetentionScreen
 import com.quietinbox.ui.theme.QuietTheme
 
 sealed class BottomNavItem(val route: Any, val label: String, val icon: androidx.compose.ui.graphics.vector.ImageVector) {
@@ -103,65 +108,56 @@ fun QuietNavHost(
         ) {
             // 1. Onboarding
             composable<Onboarding> {
-                StubScreen(
-                    title = "Onboarding",
-                    subtitle = "Welcome to Quiet Inbox. Phase 8 will implement the 4-step onboarding flow.",
-                    onAction = {
+                OnboardingScreen(
+                    onNavigateToHome = {
                         navController.navigate(Home) {
                             popUpTo(Onboarding) { inclusive = true }
                         }
-                    },
-                    actionLabel = "Enter App (Skip to Home)"
+                    }
                 )
             }
 
             // 2. Home
             composable<Home> {
-                StubScreen(
-                    title = "Home",
-                    subtitle = "Quiet Switch, stats tiles, and activity heatmap. Phase 5 will implement this."
+                HomeScreen(
+                    onNavigateToPermissionsHealth = { navController.navigate(PermissionsHealth) },
+                    onNavigateToInboxDay = { day -> navController.navigate(InboxFiltered(day = day)) }
                 )
             }
 
             // 3. Inbox
             composable<Inbox> {
-                StubScreen(
-                    title = "Inbox",
-                    subtitle = "Search, day grouped notifications, filters. Phase 4 will implement this."
-                )
+                InboxScreen()
             }
 
             // 4. InboxFiltered
-            composable<InboxFiltered> { backStackEntry ->
-                val args = backStackEntry.toRoute<InboxFiltered>()
-                StubScreen(
-                    title = "Inbox Filtered",
-                    subtitle = "Filtered by package=${args.packageName}, day=${args.day}. Phase 4 will implement this."
-                )
+            composable<InboxFiltered> {
+                InboxScreen()
             }
 
             // 5. NotificationDetail
-            composable<NotificationDetail> { backStackEntry ->
-                val args = backStackEntry.toRoute<NotificationDetail>()
-                StubScreen(
-                    title = "Notification Detail",
-                    subtitle = "Detail view for notification id=${args.id}. Phase 4 will implement this."
-                )
+            composable<NotificationDetail> {
+                InboxScreen()
             }
 
             // 6. Settings
             composable<Settings> {
-                StubScreen(
-                    title = "Settings",
-                    subtitle = "Main settings hub. Phase 9 will implement this."
+                SettingsScreen(
+                    onNavigateToPermissionsHealth = { navController.navigate(PermissionsHealth) },
+                    onNavigateToAllowRules = { navController.navigate(AllowRules) },
+                    onNavigateToSchedules = { navController.navigate(Schedules) },
+                    onNavigateToMutedApps = { navController.navigate(MutedApps) },
+                    onNavigateToStorage = { navController.navigate(Storage) },
+                    onNavigateToAppLock = { navController.navigate(AppLock) },
+                    onNavigateToPrivacy = { navController.navigate(Privacy) },
+                    onNavigateToAbout = { navController.navigate(About) }
                 )
             }
 
             // 7. PermissionsHealth
             composable<PermissionsHealth> {
-                StubScreen(
-                    title = "Permissions & Health",
-                    subtitle = "Diagnostics and system permissions manager. Phase 8 will implement this."
+                PermissionsHealthScreen(
+                    onNavigateBack = { navController.popBackStack() }
                 )
             }
 
@@ -169,24 +165,24 @@ fun QuietNavHost(
             composable<AllowRules> {
                 StubScreen(
                     title = "Always Allow Rules",
-                    subtitle = "Rules for apps, senders, and words. Phase 6 will implement this."
+                    subtitle = "Rules for apps, senders, and words.",
+                    onAction = { navController.popBackStack() },
+                    actionLabel = "Back"
                 )
             }
 
             // 9. Schedules
             composable<Schedules> {
-                StubScreen(
-                    title = "Schedules",
-                    subtitle = "Scheduled quiet and open time windows. Phase 7 will implement this."
+                SchedulesScreen(
+                    onNavigateBack = { navController.popBackStack() },
+                    onNavigateToEdit = { id -> navController.navigate(ScheduleEdit(id)) }
                 )
             }
 
             // 10. ScheduleEdit
-            composable<ScheduleEdit> { backStackEntry ->
-                val args = backStackEntry.toRoute<ScheduleEdit>()
-                StubScreen(
-                    title = "Edit Schedule",
-                    subtitle = "Editing schedule id=${args.id}. Phase 7 will implement this."
+            composable<ScheduleEdit> {
+                ScheduleEditScreen(
+                    onNavigateBack = { navController.popBackStack() }
                 )
             }
 
@@ -194,39 +190,42 @@ fun QuietNavHost(
             composable<MutedApps> {
                 StubScreen(
                     title = "Muted Apps",
-                    subtitle = "Apps that are always silenced. Phase 6 will implement this."
+                    subtitle = "Apps that are always silenced.",
+                    onAction = { navController.popBackStack() },
+                    actionLabel = "Back"
                 )
             }
 
             // 12. Storage
             composable<Storage> {
-                StubScreen(
-                    title = "Storage & Retention",
-                    subtitle = "Retention policies and database cleanup. Phase 9 will implement this."
+                StorageRetentionScreen(
+                    onNavigateBack = { navController.popBackStack() }
                 )
             }
 
             // 13. AppLock
             composable<AppLock> {
-                StubScreen(
-                    title = "App Lock",
-                    subtitle = "Biometric and PIN security lock. Phase 9 will implement this."
+                AppLockScreen(
+                    onNavigateBack = { navController.popBackStack() }
                 )
             }
 
             // 14. Privacy
             composable<Privacy> {
-                StubScreen(
-                    title = "Privacy",
-                    subtitle = "Offline-first guarantee and local data policies. Phase 9 will implement this."
+                PrivacyScreen(
+                    onNavigateBack = { navController.popBackStack() }
                 )
             }
 
             // 15. About
             composable<About> {
-                StubScreen(
-                    title = "About",
-                    subtitle = "Quiet Inbox version info and diagnostics. Phase 9 will implement this."
+                AboutScreen(
+                    onNavigateBack = { navController.popBackStack() },
+                    onRerunOnboarding = {
+                        navController.navigate(Onboarding) {
+                            popUpTo(0) { inclusive = true }
+                        }
+                    }
                 )
             }
         }
@@ -241,22 +240,22 @@ fun StubScreen(
     actionLabel: String? = null,
     onAction: (() -> Unit)? = null
 ) {
-    Column(
+    androidx.compose.foundation.layout.Column(
         modifier = modifier
             .fillMaxSize()
             .padding(QuietTheme.tokens.screenHorizontalPadding)
     ) {
-        SectionHeader(title = title)
-        Box(
+        com.quietinbox.ui.components.SectionHeader(title = title)
+        androidx.compose.foundation.layout.Box(
             modifier = Modifier
                 .weight(1f)
                 .fillMaxSize(),
             contentAlignment = androidx.compose.ui.Alignment.Center
         ) {
-            EmptyState(
-                title = "Under Construction",
+            com.quietinbox.ui.components.EmptyState(
+                title = title,
                 subtitle = subtitle,
-                icon = Icons.Default.Construction,
+                icon = androidx.compose.material.icons.Icons.Default.Settings,
                 actionLabel = actionLabel,
                 onActionClick = onAction
             )
