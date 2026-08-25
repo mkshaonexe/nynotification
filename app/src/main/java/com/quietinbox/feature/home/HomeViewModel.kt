@@ -95,17 +95,40 @@ class HomeViewModel @Inject constructor(
         }
 
         combine(
-            homeStatsDao.getCapturedCount(fromEpochMs),
-            homeStatsDao.getSilencedCount(fromEpochMs),
-            homeStatsDao.getAllowedCount(fromEpochMs),
-            homeStatsDao.getDistinctAppsCount(fromEpochMs),
-            homeStatsDao.getQuietDaysCount(fromDayInt),
-            homeStatsDao.getAllDailyStats(),
-            homeStatsDao.getBusiestHour(fromEpochMs),
-            homeStatsDao.getTopAppsByCount(fromEpochMs, 5),
-            homeStatsDao.getMutedPackages(),
-            homeStatsDao.getDailySilencedFromFirewall(fromEpochMs)
-        ) { captured, silenced, allowed, apps, quietDays, allStats, busiestHour, topApps, mutedList, dailySilenced ->
+            listOf(
+                homeStatsDao.getCapturedCount(fromEpochMs),
+                homeStatsDao.getSilencedCount(fromEpochMs),
+                homeStatsDao.getAllowedCount(fromEpochMs),
+                homeStatsDao.getDistinctAppsCount(fromEpochMs),
+                homeStatsDao.getQuietDaysCount(fromDayInt),
+                homeStatsDao.getAllDailyStats(),
+                homeStatsDao.getBusiestHour(fromEpochMs),
+                homeStatsDao.getTopAppsByCount(fromEpochMs, 5),
+                homeStatsDao.getMutedPackages(),
+                homeStatsDao.getDailySilencedFromFirewall(fromEpochMs)
+            )
+        ) { array ->
+            @Suppress("UNCHECKED_CAST")
+            val captured = array[0] as Int
+            @Suppress("UNCHECKED_CAST")
+            val silenced = array[1] as Int
+            @Suppress("UNCHECKED_CAST")
+            val allowed = array[2] as Int
+            @Suppress("UNCHECKED_CAST")
+            val apps = array[3] as Int
+            @Suppress("UNCHECKED_CAST")
+            val quietDays = array[4] as Int
+            @Suppress("UNCHECKED_CAST")
+            val allStats = array[5] as List<DailyStatEntity>
+            @Suppress("UNCHECKED_CAST")
+            val busiestHour = array[6] as HourCount?
+            @Suppress("UNCHECKED_CAST")
+            val topApps = array[7] as List<AppNotificationCount>
+            @Suppress("UNCHECKED_CAST")
+            val mutedList = array[8] as List<String>
+            @Suppress("UNCHECKED_CAST")
+            val dailySilenced = array[9] as List<DaySilencedCount>
+
             val today = LocalDate.now()
             val streakResult = StreakCalculator.calculate(allStats, today)
 

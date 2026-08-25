@@ -103,7 +103,7 @@ class InboxViewModel @Inject constructor(
     val totalNotificationCount: StateFlow<Int> = inboxDao.observeNotificationCount()
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), 0)
 
-    val showTransportInInbox: StateFlow<Boolean> = settingsDataStore.settingsFlow
+    val showTransportInInbox: StateFlow<Boolean> = settingsDataStore.settings
         .map { it.showTransportInInbox }
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), false)
 
@@ -311,7 +311,7 @@ class InboxViewModel @Inject constructor(
                 senderDigits = row.senderDigits,
                 channelId = row.channelId,
                 androidCategory = row.androidCategory,
-                importance = row.importance,
+                importance = row.importance ?: 0,
                 signalClass = row.signalClass.name,
                 contentHash = row.contentHash,
                 firstSeenAt = row.firstSeenAt,

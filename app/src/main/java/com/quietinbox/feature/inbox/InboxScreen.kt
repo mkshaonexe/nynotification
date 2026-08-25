@@ -62,6 +62,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.paging.LoadState
 import androidx.paging.compose.collectAsLazyPagingItems
 import androidx.paging.compose.itemKey
+import com.quietinbox.R
 import com.quietinbox.core.apps.InstalledAppsProvider
 import com.quietinbox.core.health.HealthState
 import com.quietinbox.feature.inbox.components.InboxAppFilterSheet

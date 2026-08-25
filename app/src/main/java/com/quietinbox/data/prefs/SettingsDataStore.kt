@@ -72,6 +72,8 @@ class SettingsDataStore @Inject constructor(
         dataStore.edit { it[PreferencesKeys.PAUSED_UNTIL_EPOCH_MS] = epochMs }
     }
 
+    suspend fun setPausedUntil(epochMs: Long) = setPausedUntilEpochMs(epochMs)
+
     suspend fun setLeaveSystemAndMediaAlone(enabled: Boolean) {
         dataStore.edit { it[PreferencesKeys.LEAVE_SYSTEM_AND_MEDIA_ALONE] = enabled }
     }
