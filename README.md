@@ -1,21 +1,10 @@
-<div align="center">
-<img width="1200" height="475" alt="GHBanner" src="https://ai.google.dev/static/site-assets/images/share-ais-513315318.png" />
-</div>
+# Quiet Inbox
 
-# Run and deploy your AI Studio app
+Quiet Inbox silences non-critical notifications by default, captures 100% of them to a private, searchable inbox on the device, and lets exactly what you specify — a person, a number, a word, an app, or an active schedule — break through.
 
-This contains everything you need to run your app locally.
-
-View your app in AI Studio: https://ai.studio/apps/40953502-43b7-4b7a-9553-86874f40f1d6
-
-## Run Locally
-
-**Prerequisites:**  [Android Studio](https://developer.android.com/studio)
-
-
-1. Open Android Studio
-2. Select **Open** and choose the directory containing this project
-3. Allow Android Studio to fix any incompatibilities as it imports the project.
-4. Create a file named `.env` in the project directory and set `GEMINI_API_KEY` in that file to your Gemini API key (see `.env.example` for an example)
-5. Remove this line from the app's `build.gradle.kts` file: `signingConfig = signingConfigs.getByName("debugConfig")`
-6. Run the app on an emulator or physical device
+## Key Principles
+- **100% Offline**: Zero internet permission (`android.permission.INTERNET` is not requested).
+- **Private & Local**: All notifications and data remain on-device in a local Room database.
+- **Signal Engine**: Collapses spam, progress updates, and ongoing notification bursts into session records.
+- **Rule Ladder**: Configurable Always-allow rules, OTP detection, muted apps, and custom schedules.
+- **Material 3 & Jetpack Compose**: Modern, responsive, and battery-efficient architecture.

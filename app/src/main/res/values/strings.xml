@@ -1,3 +1,35 @@
 <resources>
-    <string name="app_name">MyNotification</string>
+    <string name="app_name">Quiet Inbox</string>
+    <string name="app_tagline">Your phone stops buzzing. Nothing gets lost.</string>
+
+    <!-- Navigation Tabs -->
+    <string name="nav_home">Home</string>
+    <string name="nav_inbox">Inbox</string>
+    <string name="nav_settings">Settings</string>
+
+    <!-- Common Actions & Dialogs -->
+    <string name="action_ok">OK</string>
+    <string name="action_cancel">Cancel</string>
+    <string name="action_save">Save</string>
+    <string name="action_delete">Delete</string>
+    <string name="action_clear">Clear</string>
+    <string name="action_search">Search</string>
+    <string name="action_filter">Filter</string>
+    <string name="action_close">Close</string>
+    <string name="action_back">Back</string>
+    <string name="action_done">Done</string>
+    <string name="action_undo">Undo</string>
+    <string name="action_continue">Continue</string>
+    <string name="action_skip">Skip</string>
+    <string name="action_retry">Retry</string>
+    <string name="action_confirm">Confirm</string>
+
+    <!-- Common Status & Empty States -->
+    <string name="status_under_construction">Under Construction</string>
+    <string name="status_loading">Loading…</string>
+    <string name="empty_generic_title">Nothing here</string>
+    <string name="empty_generic_subtitle">Check back later or change your filters.</string>
+
+    <!-- App Identity & Diagnostics -->
+    <string name="version_format">Version %1$s (%2$d)</string>
 </resources>

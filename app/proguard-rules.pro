@@ -1,21 +1,35 @@
-# Add project specific ProGuard rules here.
-# You can control the set of applied configuration files using the
-# proguardFiles setting in build.gradle.
-#
-# For more details, see
-#   http://developer.android.com/guide/developing/tools/proguard.html
+# Room
+-keep class androidx.room.Room { *; }
+-keep class * extends androidx.room.RoomDatabase { *; }
+-dontwarn androidx.room.paging.**
 
-# If your project uses WebView with JS, uncomment the following
-# and specify the fully qualified class name to the JavaScript interface
-# class:
-#-keepclassmembers class fqcn.of.javascript.interface.for.webview {
-#   public *;
-#}
+# Hilt & Dagger
+-keep class * extends android.app.Application { *; }
+-keep class * extends android.app.Service { *; }
+-keep class * extends android.content.BroadcastReceiver { *; }
+-keep class * extends android.app.Activity { *; }
+-keep class * extends androidx.work.ListenableWorker { *; }
+-keep class * implements dagger.hilt.internal.GeneratedComponent { *; }
+-keep class * implements dagger.hilt.internal.TestSingletonComponent { *; }
+-dontwarn com.google.errorprone.annotations.**
+-dontwarn dagger.hilt.android.internal.lifecycle.**
 
-# Uncomment this to preserve the line number information for
-# debugging stack traces.
-#-keepattributes SourceFile,LineNumberTable
+# Kotlinx Serialization
+-keepattributes *Annotation*, InnerClasses
+-dontnote kotlinx.serialization.SerializationKt
+-keepclassmembers class * {
+    *** Companion;
+}
+-keepclasseswithmembers class * {
+    kotlinx.serialization.KSerializer serializer(...);
+}
+-keep,allowobfuscation,allowshrinking class * {
+    <init>(...);
+}
 
-# If you keep the line number information, uncomment this to
-# hide the original source file name.
-#-renamesourcefileattribute SourceFile
+# NotificationListenerService
+-keep class com.quietinbox.service.QuietListenerService { *; }
+-keep class com.quietinbox.service.BootReceiver { *; }
+
+# Biometrics
+-keep class androidx.biometric.** { *; }

@@ -1,14 +1,3 @@
-<?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <!-- Phase 3: Firewall & Rule Matching string resources -->
-    <string name="rule_label_our_app">Quiet Inbox notification</string>
-    <string name="rule_label_safety_floor">Alarm or phone call</string>
-    <string name="rule_label_system_media">System or media control</string>
-    <string name="rule_label_paused">Quiet Mode is paused</string>
-    <string name="rule_label_always_allow">Always-allow rule</string>
-    <string name="rule_label_otp">Verification code</string>
-    <string name="rule_label_schedule">Schedule: %1$s</string>
-    <string name="rule_label_muted_app">Muted app</string>
-    <string name="rule_label_quiet_mode">Quiet Mode is on</string>
-    <string name="rule_label_default">Default</string>
+    <!-- Phase 3 Strings (Firewall Engine & Rule Labels) -->
 </resources>
