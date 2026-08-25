@@ -8,11 +8,7 @@ import com.quietinbox.data.db.dao.NotificationDao
 import com.quietinbox.data.db.dao.RuleDao
 import com.quietinbox.data.db.dao.ScheduleDao
 import com.quietinbox.data.db.dao.StatsDao
-import com.quietinbox.feature.home.data.HomeStatsDao
-import com.quietinbox.feature.inbox.data.InboxDao
 import com.quietinbox.feature.rules.data.RulesUiDao
-import com.quietinbox.feature.schedules.data.SchedulesUiDao
-import com.quietinbox.feature.settings.data.SettingsDao
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -50,17 +46,5 @@ object DatabaseModule {
     fun provideAppCacheDao(db: QuietDatabase): AppCacheDao = db.appCacheDao()
 
     @Provides
-    fun provideHomeStatsDao(db: QuietDatabase): HomeStatsDao = db.homeStatsDao()
-
-    @Provides
-    fun provideInboxDao(db: QuietDatabase): InboxDao = db.inboxDao()
-
-    @Provides
     fun provideRulesUiDao(db: QuietDatabase): RulesUiDao = db.rulesUiDao()
-
-    @Provides
-    fun provideSchedulesUiDao(db: QuietDatabase): SchedulesUiDao = db.schedulesUiDao()
-
-    @Provides
-    fun provideSettingsDao(db: QuietDatabase): SettingsDao = db.settingsDao()
 }

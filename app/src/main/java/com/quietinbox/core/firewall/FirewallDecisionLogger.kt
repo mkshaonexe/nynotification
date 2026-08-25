@@ -19,10 +19,12 @@ import javax.inject.Singleton
  * Writes to the `firewall_decisions` database table via [StatsDao].
  */
 @Singleton
-class FirewallDecisionLogger @Inject constructor(
+class FirewallDecisionLogger(
     private val statsDao: StatsDao,
-    ioDispatcher: CoroutineDispatcher = Dispatchers.IO
+    ioDispatcher: CoroutineDispatcher
 ) {
+    @Inject
+    constructor(statsDao: StatsDao) : this(statsDao, Dispatchers.IO)
 
     private val scope = CoroutineScope(SupervisorJob() + ioDispatcher)
     private val queue = ConcurrentLinkedQueue<FirewallDecisionEntity>()
@@ -38,28 +40,32 @@ class FirewallDecisionLogger @Inject constructor(
      * @param decision The [FirewallDecisionEntity] to record.
      */
     fun log(decision: FirewallDecisionEntity) {
-        queue.offer(decision)
+        queue.add(decision)
         if (queue.size >= BATCH_THRESHOLD) {
-            scope.launch {
-                flush()
-            }
+            flush()
         }
     }
 
     /**
-     * Flushes all currently buffered decisions to the database.
+     * Flushes all queued decisions to the database.
      */
-    suspend fun flush() {
-        flushMutex.withLock {
-            if (queue.isEmpty()) return
-            val batch = mutableListOf<FirewallDecisionEntity>()
-            while (true) {
-                val item = queue.poll() ?: break
-                batch.add(item)
-            }
-            if (batch.isNotEmpty()) {
-                runCatching {
-                    statsDao.logDecisions(batch)
+    fun flush() {
+        if (queue.isEmpty()) return
+
+        scope.launch {
+            flushMutex.withLock {
+                val batch = mutableListOf<FirewallDecisionEntity>()
+                while (true) {
+                    val item = queue.poll() ?: break
+                    batch.add(item)
+                }
+
+                if (batch.isNotEmpty()) {
+                    try {
+                        statsDao.insertFirewallDecisions(batch)
+                    } catch (_: Exception) {
+                        // Resilient: failure in logging shouldn't crash pipeline
+                    }
                 }
             }
         }
