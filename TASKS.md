@@ -934,17 +934,17 @@ dependency has crept in.
 
 | Wave | Phase | Title | Owner conversation | Status |
 |:-:|:-:|---|---|---|
-| 1 | 0 | Foundation & contracts | | ☐ |
-| 2 | 1 | Capture pipeline | | ☐ |
-| 2 | 2 | Signal Engine (spam fix) | | ☐ |
-| 2 | 3 | Firewall & rules | | ☐ |
-| 2 | 4 | Inbox | | ☐ |
-| 2 | 5 | Home & statistics | | ☐ |
-| 2 | 6 | Allow rules & app picker | | ☐ |
-| 2 | 7 | Schedules | | ☐ |
-| 2 | 8 | Onboarding & reliability | | ☐ |
-| 2 | 9 | Settings & retention | | ☐ |
-| 3 | 10 | Integration & release | | ☐ |
+| 1 | 0 | Foundation & contracts | | ✅ |
+| 2 | 1 | Capture pipeline | | ✅ |
+| 2 | 2 | Signal Engine (spam fix) | | ✅ |
+| 2 | 3 | Firewall & rules | | ✅ |
+| 2 | 4 | Inbox | | ✅ |
+| 2 | 5 | Home & statistics | | ✅ |
+| 2 | 6 | Allow rules & app picker | | ✅ |
+| 2 | 7 | Schedules | | ✅ |
+| 2 | 8 | Onboarding & reliability | | ✅ |
+| 2 | 9 | Settings & retention | | ✅ |
+| 3 | 10 | Integration & release | | ✅ |
 
 ## 4. If an agent gets stuck
 
