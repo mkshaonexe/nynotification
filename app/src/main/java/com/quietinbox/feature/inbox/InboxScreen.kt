@@ -77,6 +77,8 @@ import com.quietinbox.feature.inbox.model.InboxItem
 import com.quietinbox.feature.inbox.model.InboxStateFilter
 import kotlinx.coroutines.flow.collectLatest
 
+import androidx.compose.foundation.ExperimentalFoundationApi
+
 /**
  * Main Inbox Screen composable.
  *
@@ -84,7 +86,7 @@ import kotlinx.coroutines.flow.collectLatest
  * @param installedAppsProvider Provider for installed app labels and icons.
  * @param viewModel Injected InboxViewModel instance.
  */
-@OptIn(ExperimentalMaterial3Api::class)
+@OptIn(ExperimentalMaterial3Api::class, ExperimentalFoundationApi::class)
 @Composable
 fun InboxScreen(
     onNavigateToPermissions: () -> Unit = {},

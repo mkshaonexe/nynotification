@@ -11,7 +11,9 @@ import com.quietinbox.data.prefs.SettingsDataStore
 import com.quietinbox.feature.home.components.HomeMetrics
 import com.quietinbox.feature.home.components.StatsRange
 import com.quietinbox.feature.home.data.AppNotificationCount
+import com.quietinbox.feature.home.data.DaySilencedCount
 import com.quietinbox.feature.home.data.HomeStatsDao
+import com.quietinbox.feature.home.data.HourCount
 import com.quietinbox.feature.home.domain.HeatmapBucketer
 import com.quietinbox.feature.home.domain.HeatmapData
 import com.quietinbox.feature.home.domain.StreakCalculator
@@ -53,7 +55,7 @@ class HomeViewModel @Inject constructor(
 
     @OptIn(ExperimentalCoroutinesApi::class)
     val uiState: StateFlow<HomeUiState> = combine(
-        settingsDataStore.settingsFlow,
+        settingsDataStore.settings,
         listenerHealth.snapshot,
         selectedRangeFlow,
         secondsPerInterruptionFlow,
