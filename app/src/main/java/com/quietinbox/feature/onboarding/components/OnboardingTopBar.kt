@@ -55,7 +55,7 @@ fun OnboardingTopBar(
     ) {
         // Back Button
         Box(modifier = Modifier.size(48.dp), contentAlignment = Alignment.Center) {
-            AnimatedVisibility(visible = showBackButton) {
+            if (showBackButton) {
                 IconButton(
                     onClick = onBackClick,
                     modifier = Modifier.sizeIn(minWidth = 48.dp, minHeight = 48.dp)
@@ -97,7 +97,7 @@ fun OnboardingTopBar(
 
         // Skip Button
         Box(modifier = Modifier.size(48.dp), contentAlignment = Alignment.Center) {
-            AnimatedVisibility(visible = showSkipButton) {
+            if (showSkipButton) {
                 TextButton(
                     onClick = onSkipClick,
                     modifier = Modifier.sizeIn(minWidth = 48.dp, minHeight = 48.dp)

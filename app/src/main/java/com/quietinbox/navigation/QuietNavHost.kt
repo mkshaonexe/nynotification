@@ -221,7 +221,7 @@ fun QuietNavHost(
             composable<About> {
                 AboutScreen(
                     onNavigateBack = { navController.popBackStack() },
-                    onRerunOnboarding = {
+                    onNavigateToOnboarding = {
                         navController.navigate(Onboarding) {
                             popUpTo(0) { inclusive = true }
                         }

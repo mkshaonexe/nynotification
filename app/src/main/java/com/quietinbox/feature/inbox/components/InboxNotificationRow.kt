@@ -51,7 +51,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.quietinbox.feature.inbox.R
+import com.quietinbox.R
 import com.quietinbox.feature.inbox.model.InboxItem
 import com.quietinbox.feature.inbox.util.InboxSearchHelper
 import com.quietinbox.feature.inbox.util.InboxTimeHelper

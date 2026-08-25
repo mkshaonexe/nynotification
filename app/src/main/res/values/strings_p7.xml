@@ -33,6 +33,17 @@
     <string name="schedule_days_all">Every day</string>
     <string name="schedule_days_weekdays">Weekdays</string>
     <string name="schedule_days_weekends">Weekends</string>
+    <string name="schedule_days_sun_thu">Sun – Thu</string>
+
+    <string name="schedule_day_m">M</string>
+    <string name="schedule_day_t">T</string>
+    <string name="schedule_day_w">W</string>
+    <string name="schedule_day_th">T</string>
+    <string name="schedule_day_f">F</string>
+    <string name="schedule_day_s">S</string>
+    <string name="schedule_day_su">S</string>
+
+    <string name="schedule_active_now">Active Now</string>
 
     <string name="schedule_policy_section">Behavior Policy</string>
     <string name="schedule_policy_quiet">Quiet Window</string>

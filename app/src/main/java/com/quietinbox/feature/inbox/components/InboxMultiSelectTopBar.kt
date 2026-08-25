@@ -27,7 +27,7 @@ import androidx.compose.ui.semantics.clearAndSetSemantics
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import com.quietinbox.feature.inbox.R
+import com.quietinbox.R
 
 /**
  * Contextual top bar shown when items are selected in the Inbox.
