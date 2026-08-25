@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Schedules List Screen -->
+    <string name="schedules_title">Schedules</string>
+    <string name="schedule_add">Add schedule</string>
+    <string name="schedule_add_content_desc">Add new schedule</string>
+    <string name="schedule_active_now">Active now</string>
+    <string name="schedule_inactive">Disabled</string>
+    <string name="schedule_toggle_content_desc">Toggle schedule %1$s</string>
+    
+    <!-- Empty State & Presets -->
+    <string name="schedule_empty_title">No schedules yet</string>
+    <string name="schedule_empty_desc">Set up quiet windows like Sleep or Work, or open windows that let everything through.</string>
+    <string name="schedule_presets_header">Quick presets</string>
+    <string name="schedule_preset_sleep_title">Sleep</string>
+    <string name="schedule_preset_sleep_desc">22:00 – 07:00 · Daily</string>
+    <string name="schedule_preset_work_title">Work</string>
+    <string name="schedule_preset_work_desc">09:00 – 18:00 · Sun–Thu</string>
+    <string name="schedule_preset_prayer_title">Prayer</string>
+    <string name="schedule_preset_prayer_desc">13:00 – 13:30 · Daily</string>
+
+    <!-- Schedule Edit Screen -->
+    <string name="schedule_edit_title">Edit schedule</string>
+    <string name="schedule_new_title">New schedule</string>
+    <string name="schedule_name_label">Schedule name</string>
+    <string name="schedule_name_hint">e.g. Sleep, Deep Work</string>
+    <string name="schedule_time_section">Time</string>
+    <string name="schedule_start_time_label">Starts</string>
+    <string name="schedule_end_time_label">Ends</string>
+    <string name="schedule_days_section">Repeat</string>
+    <string name="schedule_policy_section">Behavior</string>
+    <string name="schedule_policy_quiet">Quiet</string>
+    <string name="schedule_policy_quiet_subtitle">Silence all except allowed apps</string>
+    <string name="schedule_policy_open">Let everything through</string>
+    <string name="schedule_policy_open_subtitle">Allow all, overriding Quiet Mode</string>
+    <string name="schedule_extra_apps_section">Extra allowed apps</string>
+    <string name="schedule_extra_apps_subtitle">These apps can notify you even during this quiet window</string>
+    <string name="schedule_add_extra_apps">Select apps (%1$d selected)</string>
+    <string name="schedule_no_extra_apps">No extra apps selected</string>
+    <string name="schedule_select_apps_button">Choose apps</string>
+
+    <!-- Overlap Warnings -->
+    <string name="schedule_overlap_open_precedence">“%1$s” is an open schedule and will let notifications through over “%2$s” during %3$s.</string>
+    <string name="schedule_overlap_warning">Overlaps with “%1$s” during %2$s.</string>
+
+    <!-- Day Names & Quick Selectors -->
+    <string name="schedule_days_all">Daily</string>
+    <string name="schedule_days_weekdays">Weekdays</string>
+    <string name="schedule_days_weekends">Weekends</string>
+    <string name="schedule_days_sun_thu">Sun–Thu</string>
+    <string name="schedule_day_m">M</string>
+    <string name="schedule_day_t">T</string>
+    <string name="schedule_day_w">W</string>
+    <string name="schedule_day_th">T</string>
+    <string name="schedule_day_f">F</string>
+    <string name="schedule_day_s">S</string>
+    <string name="schedule_day_su">S</string>
+
+    <!-- Actions & Dialogs -->
+    <string name="schedule_save">Save</string>
+    <string name="schedule_delete">Delete schedule</string>
+    <string name="schedule_delete_confirm_title">Delete schedule?</string>
+    <string name="schedule_delete_confirm_message">“%1$s” will be deleted. This cannot be undone.</string>
+    <string name="schedule_delete_action">Delete</string>
+    <string name="schedule_cancel">Cancel</string>
+    <string name="schedule_back_content_desc">Navigate back</string>
+</resources>
