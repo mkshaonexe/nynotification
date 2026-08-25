@@ -1,3 +1,107 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <!-- Phase 9 Strings (Settings, Storage, Diagnostics) -->
+    <!-- Settings Root -->
+    <string name="settings_title">Settings</string>
+    <string name="settings_section_general">General &amp; Rules</string>
+    <string name="settings_row_permissions_title">Permissions &amp; Health</string>
+    <string name="settings_row_permissions_subtitle">System access status and listener health</string>
+    <string name="settings_row_allow_rules_title">Always Allow</string>
+    <string name="settings_row_allow_rules_subtitle">Apps, contacts, and words that break through</string>
+    <string name="settings_row_schedules_title">Schedules</string>
+    <string name="settings_row_schedules_subtitle">Automated quiet windows and focus times</string>
+    <string name="settings_row_muted_apps_title">Muted Apps</string>
+    <string name="settings_row_muted_apps_subtitle">Apps silenced even when Quiet Mode is off</string>
+
+    <string name="settings_section_data_security">Data &amp; Security</string>
+    <string name="settings_row_storage_title">Storage &amp; Retention</string>
+    <string name="settings_row_storage_subtitle">Manage archive size, purge policies, and export</string>
+    <string name="settings_row_app_lock_title">App Lock</string>
+    <string name="settings_row_app_lock_subtitle">Biometric protection and screen security</string>
+    <string name="settings_row_privacy_title">Privacy</string>
+    <string name="settings_row_privacy_subtitle">How your data stays strictly on device</string>
+
+    <string name="settings_section_appearance">Appearance</string>
+    <string name="settings_theme_mode_title">Theme Mode</string>
+    <string name="settings_theme_mode_system">System</string>
+    <string name="settings_theme_mode_light">Light</string>
+    <string name="settings_theme_mode_dark">Dark</string>
+    <string name="settings_dynamic_color_title">Dynamic Color</string>
+    <string name="settings_dynamic_color_subtitle">Use Material You wallpaper accent colors</string>
+
+    <string name="settings_section_about">About</string>
+    <string name="settings_row_about_title">About Quiet Inbox</string>
+    <string name="settings_row_about_subtitle">Diagnostics, licenses, and version info</string>
+
+    <!-- Storage & Retention -->
+    <string name="storage_title">Storage &amp; Retention</string>
+    <string name="storage_section_stats">Database Status</string>
+    <string name="storage_stat_db_size">Database Size</string>
+    <string name="storage_stat_row_count">Total Notifications</string>
+    <string name="storage_stat_starred_count">Starred Items</string>
+
+    <string name="storage_section_retention">Retention Policy</string>
+    <string name="storage_retention_label">Keep unstarred notifications for:</string>
+    <string name="storage_retention_30_days">30 days</string>
+    <string name="storage_retention_90_days">90 days</string>
+    <string name="storage_retention_365_days">1 year</string>
+    <string name="storage_retention_forever">Forever</string>
+    <string name="storage_retention_starred_notice">Starred items are never deleted by retention policies.</string>
+    <string name="storage_retention_cap_notice">A safety cap of 50,000 notifications drops oldest unstarred rows.</string>
+
+    <string name="storage_section_export">Export Data</string>
+    <string name="storage_export_desc">Save a complete copy of your notification archive to a local file.</string>
+    <string name="storage_export_in_progress">Exporting notifications…</string>
+    <string name="storage_export_json">Export JSON</string>
+    <string name="storage_export_csv">Export CSV</string>
+
+    <string name="storage_section_danger">Danger Zone</string>
+    <string name="storage_delete_all_title">Erase Notification History</string>
+    <string name="storage_delete_all_desc">Permanently delete all captured notifications and statistics. This cannot be undone.</string>
+    <string name="storage_delete_all_btn">Erase All History</string>
+    <string name="storage_delete_all_confirm_keyword">DELETE</string>
+    <string name="storage_delete_all_dialog_title">Erase all history?</string>
+    <string name="storage_delete_all_dialog_message">Type DELETE to confirm permanently removing all captured notifications.</string>
+    <string name="storage_delete_all_input_placeholder">Type DELETE</string>
+
+    <!-- App Lock -->
+    <string name="app_lock_title">App Lock</string>
+    <string name="app_lock_section_biometric">Biometric Authentication</string>
+    <string name="app_lock_enable_title">Require Biometrics</string>
+    <string name="app_lock_enable_desc">Require fingerprint or face unlock when opening Quiet Inbox</string>
+    <string name="app_lock_timeout_info">App will lock again after 60 seconds in the background.</string>
+    <string name="app_lock_section_privacy">Screen Privacy</string>
+    <string name="app_lock_flag_secure_title">Hide in App Switcher</string>
+    <string name="app_lock_flag_secure_desc">Block screenshots and hide content in the recent apps overview</string>
+
+    <!-- Privacy Screen -->
+    <string name="privacy_title">Privacy</string>
+    <string name="privacy_intro">Quiet Inbox was engineered from day one to ensure your personal communications never leave your device.</string>
+    <string name="privacy_point1_title">100% Offline</string>
+    <string name="privacy_point1_desc">Quiet Inbox ships without the INTERNET permission. It is technically impossible for the app to transmit data anywhere.</string>
+    <string name="privacy_point2_title">No Accounts or Analytics</string>
+    <string name="privacy_point2_desc">There are no user accounts, no tracking SDKs, no ad frameworks, and no crash reporters.</string>
+    <string name="privacy_point3_title">Encrypted Storage Sandboxing</string>
+    <string name="privacy_point3_desc">All notification records reside solely inside the app\'s private database on your phone.</string>
+    <string name="privacy_point4_title">Cloud Backup Excluded</string>
+    <string name="privacy_point4_desc">Android cloud backup is explicitly disabled so your private messages are never uploaded to Google Drive.</string>
+    <string name="privacy_point5_title">Android 15+ Security Compliance</string>
+    <string name="privacy_point5_desc">On modern Android versions, system OTP notifications are automatically redacted from untrusted listeners by the OS.</string>
+
+    <!-- About Screen -->
+    <string name="about_title">About</string>
+    <string name="about_app_name">Quiet Inbox</string>
+    <string name="about_tagline">Silence the noise. Never miss what matters.</string>
+    <string name="about_rerun_onboarding_title">Re-run Onboarding</string>
+    <string name="about_rerun_onboarding_desc">Review the setup walkthrough and permission guides</string>
+    <string name="about_licenses_title">Open Source Licenses</string>
+    <string name="about_licenses_desc">Libraries and tools powering Quiet Inbox</string>
+    <string name="about_section_diagnostics">Diagnostics</string>
+    <string name="about_diag_captured">Total Captured</string>
+    <string name="about_diag_errors">Ingest Failures</string>
+    <string name="about_diag_last_capture">Last Capture</string>
+    <string name="about_diag_never">Never</string>
+    <string name="about_diag_db_size">Database Size</string>
+
+    <!-- Licenses Screen -->
+    <string name="licenses_title">Open Source Licenses</string>
 </resources>
