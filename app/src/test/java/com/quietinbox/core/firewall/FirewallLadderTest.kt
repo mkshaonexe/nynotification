@@ -5,15 +5,12 @@ import androidx.test.core.app.ApplicationProvider
 import com.quietinbox.core.model.CapturedNotification
 import com.quietinbox.core.model.SignalClass
 import com.quietinbox.data.db.entity.AllowRuleEntity
-import com.quietinbox.data.db.entity.RuleType
 import com.quietinbox.data.db.entity.ScheduleEntity
-import com.quietinbox.data.db.entity.SchedulePolicy
 import com.quietinbox.data.prefs.AppSettings
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.test.runTest
 import org.junit.Assert.assertEquals
-import org.junit.Assert.assertNull
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -27,6 +24,7 @@ class FirewallLadderTest {
     private lateinit var context: Context
     private lateinit var clock: FakeClock
     private lateinit var ruleDao: FakeRuleDao
+    private lateinit var statsDao: FakeStatsDao
     private lateinit var settingsDataStore: FakeSettingsDataStore
     private lateinit var scheduleEvaluator: FakeScheduleEvaluator
     private lateinit var ruleMatcher: RuleMatcher
@@ -39,6 +37,7 @@ class FirewallLadderTest {
         context = ApplicationProvider.getApplicationContext()
         clock = FakeClock(100_000L)
         ruleDao = FakeRuleDao()
+        statsDao = FakeStatsDao()
         settingsDataStore = FakeSettingsDataStore(
             AppSettings(
                 quietModeEnabled = true,
@@ -49,7 +48,7 @@ class FirewallLadderTest {
         scheduleEvaluator = FakeScheduleEvaluator()
         ruleMatcher = RuleMatcher()
         otpDetector = OtpDetector()
-        decisionLogger = FirewallDecisionLogger(ruleDao, Dispatchers.Unconfined)
+        decisionLogger = FirewallDecisionLogger(statsDao, Dispatchers.Unconfined)
 
         engine = DefaultFirewallEngine(
             context = context,
@@ -162,13 +161,13 @@ class FirewallLadderTest {
         // Self-cleared and fell through to Quiet Mode (Rule 8)
         assertEquals(FirewallAction.SILENCE, verdict.action)
         assertEquals(DefaultFirewallEngine.RULE_ID_QUIET_MODE, verdict.ruleId)
-        assertNull(settingsDataStore.settings.first().pausedUntilEpochMs)
+        assertEquals(0L, settingsDataStore.settings.first().pausedUntilEpochMs)
     }
 
     @Test
     fun `Rule 4 - always allow rule matches and yields ALLOW`() = runTest {
         ruleDao.enabledRules.add(
-            AllowRuleEntity(id = 1, type = RuleType.APP, value = "com.example.chat", enabled = true)
+            AllowRuleEntity(id = 1L, type = "APP", value = "com.example.chat", matchMode = "EXACT", enabled = true, createdAt = 0L)
         )
         val notif = createNotification(packageName = "com.example.chat")
         val verdict = engine.evaluate(notif, SignalClass.ALERT)
@@ -194,12 +193,12 @@ class FirewallLadderTest {
     fun `Rule 6 - active schedule OPEN yields ALLOW`() = runTest {
         scheduleEvaluator.activeSchedule = ActiveSchedule(
             schedule = ScheduleEntity(
-                id = 1,
+                id = 1L,
                 name = "Work Hours",
                 startMinute = 540,
                 endMinute = 1080,
                 daysMask = 127,
-                policy = SchedulePolicy.OPEN,
+                policy = "OPEN",
                 enabled = true,
                 createdAt = 0L
             ),
@@ -216,12 +215,12 @@ class FirewallLadderTest {
     fun `Rule 6 - active schedule QUIET yields SILENCE unless extra allowed`() = runTest {
         scheduleEvaluator.activeSchedule = ActiveSchedule(
             schedule = ScheduleEntity(
-                id = 1,
+                id = 1L,
                 name = "Deep Focus",
                 startMinute = 540,
                 endMinute = 1080,
                 daysMask = 127,
-                policy = SchedulePolicy.QUIET,
+                policy = "QUIET",
                 enabled = true,
                 createdAt = 0L
             ),
@@ -291,7 +290,7 @@ class FirewallLadderTest {
         ruleDao.mutedApps.add("com.alarm.app")
         settingsDataStore.setQuietModeEnabled(true)
         scheduleEvaluator.activeSchedule = ActiveSchedule(
-            schedule = ScheduleEntity(1, "Quiet", 0, 1440, 127, SchedulePolicy.QUIET, true, 0L),
+            schedule = ScheduleEntity(1L, "Quiet", 0, 1440, 127, "QUIET", true, 0L),
             extraAllowedApps = emptySet()
         )
 
@@ -332,11 +331,11 @@ class FirewallLadderTest {
     @Test
     fun `Precedence - Rule 4 (Always Allow) beats Rule 6 (Quiet Schedule), Rule 7 (Muted App), and Rule 8 (Quiet Mode)`() = runTest {
         val pkg = "com.important.chat"
-        ruleDao.enabledRules.add(AllowRuleEntity(1, RuleType.APP, pkg, enabled = true))
+        ruleDao.enabledRules.add(AllowRuleEntity(1L, "APP", pkg, "EXACT", enabled = true, createdAt = 0L))
         ruleDao.mutedApps.add(pkg)
         settingsDataStore.setQuietModeEnabled(true)
         scheduleEvaluator.activeSchedule = ActiveSchedule(
-            schedule = ScheduleEntity(1, "Quiet", 0, 1440, 127, SchedulePolicy.QUIET, true, 0L),
+            schedule = ScheduleEntity(1L, "Quiet", 0, 1440, 127, "QUIET", true, 0L),
             extraAllowedApps = emptySet()
         )
 
@@ -354,7 +353,7 @@ class FirewallLadderTest {
         settingsDataStore.setQuietModeEnabled(true)
         settingsDataStore.setOtpAlwaysBreaksThrough(true)
         scheduleEvaluator.activeSchedule = ActiveSchedule(
-            schedule = ScheduleEntity(1, "Quiet", 0, 1440, 127, SchedulePolicy.QUIET, true, 0L),
+            schedule = ScheduleEntity(1L, "Quiet", 0, 1440, 127, "QUIET", true, 0L),
             extraAllowedApps = emptySet()
         )
 
@@ -375,7 +374,7 @@ class FirewallLadderTest {
         ruleDao.mutedApps.add(pkg)
         settingsDataStore.setQuietModeEnabled(true)
         scheduleEvaluator.activeSchedule = ActiveSchedule(
-            schedule = ScheduleEntity(1, "Open Window", 0, 1440, 127, SchedulePolicy.OPEN, true, 0L),
+            schedule = ScheduleEntity(1L, "Open Window", 0, 1440, 127, "OPEN", true, 0L),
             extraAllowedApps = emptySet()
         )
 

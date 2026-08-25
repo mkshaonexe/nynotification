@@ -6,14 +6,15 @@ import com.quietinbox.core.model.CapturedNotification
 import com.quietinbox.core.model.SignalClass
 import com.quietinbox.core.time.Clock
 import com.quietinbox.data.db.dao.RuleDao
+import com.quietinbox.data.db.dao.StatsDao
+import com.quietinbox.data.db.dao.TopAppCapture
 import com.quietinbox.data.db.entity.AllowRuleEntity
+import com.quietinbox.data.db.entity.DailyStatEntity
 import com.quietinbox.data.db.entity.FirewallDecisionEntity
 import com.quietinbox.data.db.entity.MutedAppEntity
 import com.quietinbox.data.db.entity.ScheduleEntity
-import com.quietinbox.data.db.entity.SchedulePolicy
 import com.quietinbox.data.prefs.AppSettings
 import com.quietinbox.data.prefs.SettingsDataStore
-import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -32,6 +33,7 @@ class SafetyFloorTest {
     private lateinit var context: Context
     private lateinit var clock: FakeClock
     private lateinit var ruleDao: FakeRuleDao
+    private lateinit var statsDao: FakeStatsDao
     private lateinit var settingsDataStore: FakeSettingsDataStore
     private lateinit var scheduleEvaluator: FakeScheduleEvaluator
     private lateinit var ruleMatcher: RuleMatcher
@@ -44,6 +46,7 @@ class SafetyFloorTest {
         context = ApplicationProvider.getApplicationContext()
         clock = FakeClock(100_000L)
         ruleDao = FakeRuleDao()
+        statsDao = FakeStatsDao()
         settingsDataStore = FakeSettingsDataStore(
             AppSettings(
                 quietModeEnabled = true,
@@ -54,7 +57,7 @@ class SafetyFloorTest {
         scheduleEvaluator = FakeScheduleEvaluator()
         ruleMatcher = RuleMatcher()
         otpDetector = OtpDetector()
-        decisionLogger = FirewallDecisionLogger(ruleDao, Dispatchers.Unconfined)
+        decisionLogger = FirewallDecisionLogger(statsDao, Dispatchers.Unconfined)
 
         engine = DefaultFirewallEngine(
             context = context,
@@ -97,18 +100,17 @@ class SafetyFloorTest {
 
     @Test
     fun `alarm notification survives Quiet Mode, Muted App, and Active Quiet Schedule`() = runTest {
-        // Setup: App is muted, Quiet Mode is ON, Active Quiet Schedule is active
         val alarmPackage = "com.google.android.deskclock"
         ruleDao.mutedApps.add(alarmPackage)
         settingsDataStore.setQuietModeEnabled(true)
         scheduleEvaluator.activeSchedule = ActiveSchedule(
             schedule = ScheduleEntity(
-                id = 1,
+                id = 1L,
                 name = "Deep Sleep",
                 startMinute = 0,
                 endMinute = 1440,
                 daysMask = 127,
-                policy = SchedulePolicy.QUIET,
+                policy = "QUIET",
                 enabled = true,
                 createdAt = 0L
             ),
@@ -133,12 +135,12 @@ class SafetyFloorTest {
         settingsDataStore.setQuietModeEnabled(true)
         scheduleEvaluator.activeSchedule = ActiveSchedule(
             schedule = ScheduleEntity(
-                id = 1,
+                id = 1L,
                 name = "Deep Sleep",
                 startMinute = 0,
                 endMinute = 1440,
                 daysMask = 127,
-                policy = SchedulePolicy.QUIET,
+                policy = "QUIET",
                 enabled = true,
                 createdAt = 0L
             ),
@@ -163,12 +165,12 @@ class SafetyFloorTest {
         settingsDataStore.setQuietModeEnabled(true)
         scheduleEvaluator.activeSchedule = ActiveSchedule(
             schedule = ScheduleEntity(
-                id = 1,
+                id = 1L,
                 name = "Focus",
                 startMinute = 0,
                 endMinute = 1440,
                 daysMask = 127,
-                policy = SchedulePolicy.QUIET,
+                policy = "QUIET",
                 enabled = true,
                 createdAt = 0L
             ),
@@ -209,6 +211,7 @@ class SafetyFloorTest {
 
 class FakeClock(var currentEpochMs: Long = 100_000L) : Clock {
     override fun now(): Long = currentEpochMs
+    override fun elapsedRealtime(): Long = currentEpochMs
 }
 
 class FakeScheduleEvaluator(var activeSchedule: ActiveSchedule? = null) : ScheduleEvaluator {
@@ -218,46 +221,43 @@ class FakeScheduleEvaluator(var activeSchedule: ActiveSchedule? = null) : Schedu
 class FakeRuleDao : RuleDao {
     val enabledRules = mutableListOf<AllowRuleEntity>()
     val mutedApps = mutableSetOf<String>()
-    val loggedDecisions = mutableListOf<FirewallDecisionEntity>()
 
-    override suspend fun getEnabledRulesSync(): List<AllowRuleEntity> = enabledRules
+    override suspend fun getEnabledRules(): List<AllowRuleEntity> = enabledRules.filter { it.enabled }
 
-    override suspend fun isAppMuted(packageName: String): Boolean = mutedApps.contains(packageName)
+    override fun getAllRules(): Flow<List<AllowRuleEntity>> = MutableStateFlow(enabledRules)
 
-    override suspend fun insertDecisions(decisions: List<FirewallDecisionEntity>) {
-        loggedDecisions.addAll(decisions)
-    }
+    override fun getEnabledRulesFlow(): Flow<List<AllowRuleEntity>> =
+        MutableStateFlow(enabledRules.filter { it.enabled })
 
-    override suspend fun insertDecision(decision: FirewallDecisionEntity) {
-        loggedDecisions.add(decision)
-    }
-
-    override fun observeEnabledRules(): Flow<List<AllowRuleEntity>> {
-        return MutableStateFlow(enabledRules)
-    }
-
-    override fun observeMutedApps(): Flow<List<MutedAppEntity>> {
-        return MutableStateFlow(mutedApps.map { MutedAppEntity(it, 0L) })
-    }
+    override suspend fun getRuleById(id: Long): AllowRuleEntity? = enabledRules.find { it.id == id }
 
     override suspend fun insertRule(rule: AllowRuleEntity): Long {
         enabledRules.add(rule)
         return rule.id
     }
 
-    override suspend fun deleteRule(id: Long) {
+    override suspend fun updateRule(rule: AllowRuleEntity) {
+        val index = enabledRules.indexOfFirst { it.id == rule.id }
+        if (index >= 0) enabledRules[index] = rule
+    }
+
+    override suspend fun deleteRule(rule: AllowRuleEntity) {
+        enabledRules.removeAll { it.id == rule.id }
+    }
+
+    override suspend fun deleteRuleById(id: Long) {
         enabledRules.removeAll { it.id == id }
     }
 
-    override suspend fun setRuleEnabled(id: Long, enabled: Boolean) {
-        val idx = enabledRules.indexOfFirst { it.id == id }
-        if (idx >= 0) {
-            enabledRules[idx] = enabledRules[idx].copy(enabled = enabled)
-        }
-    }
+    override fun getAllMutedApps(): Flow<List<MutedAppEntity>> =
+        MutableStateFlow(mutedApps.map { MutedAppEntity(it, 0L) })
 
-    override suspend fun muteApp(packageName: String, mutedAt: Long) {
-        mutedApps.add(packageName)
+    override suspend fun getMutedPackageNames(): List<String> = mutedApps.toList()
+
+    override suspend fun isAppMuted(packageName: String): Boolean = mutedApps.contains(packageName)
+
+    override suspend fun muteApp(app: MutedAppEntity) {
+        mutedApps.add(app.packageName)
     }
 
     override suspend fun unmuteApp(packageName: String) {
@@ -265,53 +265,43 @@ class FakeRuleDao : RuleDao {
     }
 }
 
-class FakeSettingsDataStore(initialSettings: AppSettings = AppSettings()) : SettingsDataStore {
+class FakeStatsDao : StatsDao {
+    val loggedDecisions = mutableListOf<FirewallDecisionEntity>()
+
+    override suspend fun getStats(day: Int): DailyStatEntity? = null
+    override fun getRange(fromDay: Int, toDay: Int): Flow<List<DailyStatEntity>> = MutableStateFlow(emptyList())
+    override suspend fun insertOrReplace(stat: DailyStatEntity) {}
+    override suspend fun insertOrReplaceAll(stats: List<DailyStatEntity>) {}
+
+    override suspend fun logDecision(decision: FirewallDecisionEntity): Long {
+        loggedDecisions.add(decision)
+        return decision.id
+    }
+
+    override suspend fun logDecisions(decisions: List<FirewallDecisionEntity>) {
+        loggedDecisions.addAll(decisions)
+    }
+
+    override suspend fun getSilencedCountSince(sinceEpochMs: Long): Int =
+        loggedDecisions.count { it.action == "SILENCE" && it.at >= sinceEpochMs }
+
+    override suspend fun getAllowedCountSince(sinceEpochMs: Long): Int =
+        loggedDecisions.count { it.action == "ALLOW" && it.at >= sinceEpochMs }
+
+    override suspend fun getTopNotifyingApps(sinceEpochMs: Long, limit: Int): List<TopAppCapture> = emptyList()
+}
+
+class FakeSettingsDataStore(initialSettings: AppSettings = AppSettings()) : SettingsDataStore(
+    ApplicationProvider.getApplicationContext()
+) {
     private val _settings = MutableStateFlow(initialSettings)
-    override val settings: Flow<AppSettings> = _settings
+    val settingsFlow: Flow<AppSettings> = _settings
 
-    override suspend fun getSettings(): AppSettings = _settings.value
-
-    override suspend fun setQuietModeEnabled(enabled: Boolean) {
+    suspend fun setQuietMode(enabled: Boolean) {
         _settings.value = _settings.value.copy(quietModeEnabled = enabled)
     }
 
-    override suspend fun setPausedUntilEpochMs(epochMs: Long?) {
+    suspend fun setPausedUntil(epochMs: Long) {
         _settings.value = _settings.value.copy(pausedUntilEpochMs = epochMs)
-    }
-
-    override suspend fun clearPause() {
-        _settings.value = _settings.value.copy(pausedUntilEpochMs = null)
-    }
-
-    override suspend fun setLeaveSystemAndMediaAlone(enabled: Boolean) {
-        _settings.value = _settings.value.copy(leaveSystemAndMediaAlone = enabled)
-    }
-
-    override suspend fun setOtpAlwaysBreaksThrough(enabled: Boolean) {
-        _settings.value = _settings.value.copy(otpAlwaysBreaksThrough = enabled)
-    }
-
-    override suspend fun setRetentionDays(days: Int) {
-        _settings.value = _settings.value.copy(retentionDays = days)
-    }
-
-    override suspend fun setShowTransportInInbox(show: Boolean) {
-        _settings.value = _settings.value.copy(showTransportInInbox = show)
-    }
-
-    override suspend fun setAppLockEnabled(enabled: Boolean) {
-        _settings.value = _settings.value.copy(appLockEnabled = enabled)
-    }
-
-    override suspend fun setOnboardingCompleted(completed: Boolean) {
-        _settings.value = _settings.value.copy(onboardingCompleted = completed)
-    }
-
-    override suspend fun setThemeMode(mode: String) {
-        _settings.value = _settings.value.copy(themeMode = mode)
-    }
-
-    override suspend fun setDynamicColorEnabled(enabled: Boolean) {
-        _settings.value = _settings.value.copy(dynamicColorEnabled = enabled)
     }
 }
