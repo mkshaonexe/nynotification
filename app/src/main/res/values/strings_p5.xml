@@ -1,3 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <!-- Phase 5 Strings (Home & Statistics) -->
+    <!-- Screen & Mode Header -->
+    <string name="home_title">Quiet Mode</string>
+    <string name="quiet_mode_on_since">On since %1$s</string>
+    <string name="quiet_mode_on">On</string>
+    <string name="quiet_mode_off">Off</string>
+    <string name="quiet_mode_paused">Paused · %1$s remaining</string>
+    <string name="quiet_mode_resume_now">Resume now</string>
+    <string name="cd_quiet_mode_switch">Toggle Quiet Mode</string>
+
+    <!-- Pause Chips -->
+    <string name="pause_5_min">5 min</string>
+    <string name="pause_15_min">15 min</string>
+    <string name="pause_1_hour">1 hour</string>
+    <string name="pause_until_off">Until I turn it back on</string>
+
+    <!-- Health Banner -->
+    <string name="health_connected_capturing">Connected · capturing</string>
+    <string name="health_stale_warning">Connected, but nothing captured in 24h</string>
+    <string name="health_no_access_error">Notification access is off</string>
+    <string name="health_fix_action">Fix</string>
+    <string name="cd_health_status">Listener health status: %1$s</string>
+
+    <!-- Ranges -->
+    <string name="range_all">All</string>
+    <string name="range_30d">30d</string>
+    <string name="range_7d">7d</string>
+
+    <!-- Stat Tiles -->
+    <string name="stat_silenced">Silenced</string>
+    <string name="stat_captured">Captured</string>
+    <string name="stat_let_through">Let through</string>
+    <string name="stat_apps">Apps</string>
+    <string name="stat_quiet_days">Quiet days</string>
+    <string name="stat_current_streak">Current streak</string>
+    <string name="stat_longest_streak">Longest</string>
+    <string name="stat_busiest_hour">Busiest</string>
+    <string name="stat_noisiest_app">Noisiest app</string>
+
+    <!-- Stat tile formatted units -->
+    <string name="stat_days_unit">%1$dd</string>
+    <string name="stat_none">—</string>
+
+    <!-- Activity Heatmap -->
+    <string name="activity_heatmap_title">Activity</string>
+    <string name="heatmap_cell_cd">%1$s, %2$d silenced</string>
+    <string name="heatmap_day_mon">M</string>
+    <string name="heatmap_day_wed">W</string>
+    <string name="heatmap_day_fri">F</string>
+    <string name="heatmap_day_sun">S</string>
+
+    <!-- Focus Reclaimed -->
+    <string name="focus_reclaimed_title">~%1$s of attention reclaimed</string>
+    <string name="focus_reclaimed_assumption">Estimate: %1$d seconds of refocus per interruption avoided. Tap to change or hide.</string>
+    <string name="focus_reclaimed_dialog_title">Interruption recovery time</string>
+    <string name="focus_reclaimed_4s">4 seconds</string>
+    <string name="focus_reclaimed_8s">8 seconds (default)</string>
+    <string name="focus_reclaimed_15s">15 seconds</string>
+    <string name="focus_reclaimed_hide">Hide estimate</string>
+    <string name="focus_reclaimed_hours_mins">%1$dh %2$dm</string>
+    <string name="focus_reclaimed_mins">%1$dm</string>
+    <string name="focus_reclaimed_seconds">%1$ds</string>
+
+    <!-- Noisiest Apps -->
+    <string name="noisiest_apps_title">Noisiest this week</string>
+    <string name="noisiest_apps_action_mute">Mute %1$s</string>
+    <string name="noisiest_apps_action_unmute">Unmute %1$s</string>
+    <string name="noisiest_apps_muted_badge">Muted</string>
+    <string name="noisiest_apps_mute_btn">Mute</string>
+    <string name="cd_app_icon">%1$s icon</string>
+
+    <!-- Empty State -->
+    <string name="home_empty_title">Nothing captured yet</string>
+    <string name="home_empty_subtitle">When notifications arrive, your focus statistics and activity will appear here.</string>
 </resources>
