@@ -1,6 +1,6 @@
 package com.quietinbox.core.firewall
 
-import com.quietinbox.data.db.dao.RuleDao
+import com.quietinbox.data.db.dao.StatsDao
 import com.quietinbox.data.db.entity.FirewallDecisionEntity
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
@@ -16,11 +16,11 @@ import javax.inject.Singleton
 /**
  * Batched logger for firewall verdicts to prevent per-row disk I/O during notification storms.
  *
- * Writes to the `firewall_decisions` database table via [RuleDao].
+ * Writes to the `firewall_decisions` database table via [StatsDao].
  */
 @Singleton
 class FirewallDecisionLogger @Inject constructor(
-    private val ruleDao: RuleDao,
+    private val statsDao: StatsDao,
     ioDispatcher: CoroutineDispatcher = Dispatchers.IO
 ) {
 
@@ -59,7 +59,7 @@ class FirewallDecisionLogger @Inject constructor(
             }
             if (batch.isNotEmpty()) {
                 runCatching {
-                    ruleDao.insertDecisions(batch)
+                    statsDao.logDecisions(batch)
                 }
             }
         }

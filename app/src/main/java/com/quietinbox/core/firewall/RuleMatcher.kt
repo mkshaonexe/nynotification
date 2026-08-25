@@ -2,8 +2,6 @@ package com.quietinbox.core.firewall
 
 import com.quietinbox.core.model.CapturedNotification
 import com.quietinbox.data.db.entity.AllowRuleEntity
-import com.quietinbox.data.db.entity.MatchMode
-import com.quietinbox.data.db.entity.RuleType
 import java.text.Normalizer
 import java.util.Locale
 import javax.inject.Inject
@@ -13,14 +11,24 @@ import javax.inject.Singleton
  * Matches incoming captured notifications against user-configured [AllowRuleEntity] rules (Rule 4).
  *
  * Supports three rule types:
- * - [RuleType.APP]: Exact package name matching.
- * - [RuleType.SENDER]: Diacritic- and case-insensitive sender name contains,
+ * - APP: Exact package name matching.
+ * - SENDER: Diacritic- and case-insensitive sender name contains,
  *   as well as 9-digit / partial-digit tail matching for phone numbers.
- * - [RuleType.WORD]: Whole-word boundary matching (default) or substring matching ([MatchMode.CONTAINS])
+ * - WORD: Whole-word boundary matching (default) or substring matching ("CONTAINS")
  *   across title, body, subText, and senderName.
  */
 @Singleton
 class RuleMatcher @Inject constructor() {
+
+    companion object {
+        const val TYPE_APP = "APP"
+        const val TYPE_SENDER = "SENDER"
+        const val TYPE_WORD = "WORD"
+
+        const val MATCH_MODE_EXACT = "EXACT"
+        const val MATCH_MODE_CONTAINS = "CONTAINS"
+        const val MATCH_MODE_DIGITS = "DIGITS"
+    }
 
     /**
      * Finds the first enabled allow rule that matches the given [notification].
@@ -52,10 +60,11 @@ class RuleMatcher @Inject constructor() {
     fun matches(notification: CapturedNotification, rule: AllowRuleEntity): Boolean {
         if (!rule.enabled || rule.value.isBlank()) return false
 
-        return when (rule.type) {
-            RuleType.APP -> matchApp(notification, rule)
-            RuleType.SENDER -> matchSender(notification, rule)
-            RuleType.WORD -> matchWord(notification, rule)
+        return when (rule.type.uppercase(Locale.ROOT)) {
+            TYPE_APP -> matchApp(notification, rule)
+            TYPE_SENDER -> matchSender(notification, rule)
+            TYPE_WORD -> matchWord(notification, rule)
+            else -> false
         }
     }
 
@@ -115,7 +124,7 @@ class RuleMatcher @Inject constructor() {
         val normalizedText = normalizeText(combinedText)
         val normalizedRuleWord = normalizeText(ruleWord)
 
-        if (rule.matchMode == MatchMode.CONTAINS) {
+        if (rule.matchMode.equals(MATCH_MODE_CONTAINS, ignoreCase = true)) {
             return normalizedText.contains(normalizedRuleWord)
         }
 

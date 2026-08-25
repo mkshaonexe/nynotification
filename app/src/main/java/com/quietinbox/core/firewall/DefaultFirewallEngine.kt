@@ -7,7 +7,6 @@ import com.quietinbox.core.model.SignalClass
 import com.quietinbox.core.time.Clock
 import com.quietinbox.data.db.dao.RuleDao
 import com.quietinbox.data.db.entity.FirewallDecisionEntity
-import com.quietinbox.data.db.entity.SchedulePolicy
 import com.quietinbox.data.prefs.SettingsDataStore
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.flow.first
@@ -103,7 +102,7 @@ class DefaultFirewallEngine @Inject constructor(
 
         // Rule 3: Quiet Mode is paused -> ALLOW
         val pausedUntil = settings.pausedUntilEpochMs
-        if (pausedUntil != null && pausedUntil > 0) {
+        if (pausedUntil > 0L) {
             if (pausedUntil > now) {
                 return FirewallVerdict(
                     action = FirewallAction.ALLOW,
@@ -112,12 +111,12 @@ class DefaultFirewallEngine @Inject constructor(
                 )
             } else {
                 // Pause expired, self-clear
-                settingsDataStore.clearPause()
+                settingsDataStore.setPausedUntilEpochMs(0L)
             }
         }
 
         // Rule 4: Always-allow rules (App, Sender, Word) -> ALLOW
-        val enabledRules = ruleDao.getEnabledRulesSync()
+        val enabledRules = ruleDao.getEnabledRules()
         val matchedRule = ruleMatcher.findMatchingRule(n, enabledRules)
         if (matchedRule != null) {
             return FirewallVerdict(
@@ -140,14 +139,14 @@ class DefaultFirewallEngine @Inject constructor(
         val activeSchedule = scheduleEvaluator.activeAt(now)
         if (activeSchedule != null) {
             val scheduleName = activeSchedule.schedule.name
-            return if (activeSchedule.schedule.policy == SchedulePolicy.OPEN) {
+            return if (activeSchedule.schedule.policy.equals("OPEN", ignoreCase = true)) {
                 FirewallVerdict(
                     action = FirewallAction.ALLOW,
                     ruleId = RULE_ID_SCHEDULE,
                     ruleLabel = formatStringSafely(R.string.rule_label_schedule, "Schedule: $scheduleName", scheduleName)
                 )
             } else {
-                // SchedulePolicy.QUIET
+                // Schedule policy is QUIET
                 if (activeSchedule.extraAllowedApps.contains(n.packageName)) {
                     FirewallVerdict(
                         action = FirewallAction.ALLOW,
@@ -214,7 +213,7 @@ class DefaultFirewallEngine @Inject constructor(
     private fun logDecision(sbnKey: String, verdict: FirewallVerdict) {
         val decision = FirewallDecisionEntity(
             sbnKey = sbnKey,
-            action = verdict.action,
+            action = verdict.action.name,
             ruleId = verdict.ruleId,
             ruleLabel = verdict.ruleLabel,
             at = clock.now()
