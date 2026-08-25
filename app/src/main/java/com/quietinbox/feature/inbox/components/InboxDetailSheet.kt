@@ -55,7 +55,7 @@ import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.quietinbox.feature.inbox.R
+import com.quietinbox.R
 import com.quietinbox.feature.inbox.data.NotificationWithVerdict
 import com.quietinbox.feature.inbox.util.InboxTimeHelper
 import com.quietinbox.feature.inbox.util.OtpHelper

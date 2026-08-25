@@ -37,9 +37,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import com.quietinbox.R
 import com.quietinbox.core.apps.InstalledApp
 import com.quietinbox.core.apps.InstalledAppsProvider
-import com.quietinbox.feature.inbox.R
 
 /**
  * Bottom sheet for picking an app filter in the Inbox.

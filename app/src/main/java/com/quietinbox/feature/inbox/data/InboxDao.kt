@@ -20,17 +20,24 @@ interface InboxDao {
     fun observeNotificationCount(): Flow<Int>
 
     @Query("""
-        SELECT * FROM notifications
+        SELECT 
+            n.id, n.sbnKey, n.packageName, n.appLabel, n.title, n.body, n.subText,
+            n.senderName, n.senderDigits, n.channelId, n.androidCategory, n.importance,
+            n.signalClass, n.contentHash, n.firstSeenAt, n.lastSeenAt, n.endedAt,
+            n.updateCount, n.wasRateLimited, n.isSeen, n.isStarred, n.removalReason,
+            fd.action AS firewallAction, fd.ruleId AS firewallRuleId, fd.ruleLabel AS firewallRuleLabel
+        FROM notifications n
+        LEFT JOIN firewall_decisions fd ON n.id = fd.notificationId
         WHERE (:stateFilter = 'ALL' 
-               OR (:stateFilter = 'UNSEEN' AND isSeen = 0)
-               OR (:stateFilter = 'SEEN' AND isSeen = 1)
-               OR (:stateFilter = 'STARRED' AND isStarred = 1))
-          AND (:packageName IS NULL OR packageName = :packageName)
-          AND (:startEpochMs IS NULL OR firstSeenAt >= :startEpochMs)
-          AND (:endEpochMs IS NULL OR firstSeenAt <= :endEpochMs)
-          AND (:includeTransport = 1 OR signalClass != 'TRANSPORT')
-          AND (:query IS NULL OR id IN (SELECT rowid FROM notifications_fts WHERE notifications_fts MATCH :query) OR (:digitsQuery IS NOT NULL AND senderDigits LIKE '%' || :digitsQuery || '%'))
-        ORDER BY firstSeenAt DESC
+               OR (:stateFilter = 'UNSEEN' AND n.isSeen = 0)
+               OR (:stateFilter = 'SEEN' AND n.isSeen = 1)
+               OR (:stateFilter = 'STARRED' AND n.isStarred = 1))
+          AND (:packageName IS NULL OR n.packageName = :packageName)
+          AND (:startEpochMs IS NULL OR n.firstSeenAt >= :startEpochMs)
+          AND (:endEpochMs IS NULL OR n.firstSeenAt <= :endEpochMs)
+          AND (:includeTransport = 1 OR n.signalClass != 'TRANSPORT')
+          AND (:query IS NULL OR n.id IN (SELECT rowid FROM notifications_fts WHERE notifications_fts MATCH :query) OR (:digitsQuery IS NOT NULL AND n.senderDigits LIKE '%' || :digitsQuery || '%'))
+        ORDER BY n.firstSeenAt DESC
     """)
     fun pagingSource(
         stateFilter: String,
@@ -40,7 +47,7 @@ interface InboxDao {
         includeTransport: Boolean,
         query: String?,
         digitsQuery: String?
-    ): PagingSource<Int, NotificationEntity>
+    ): PagingSource<Int, NotificationWithVerdict>
 
     @Query("UPDATE notifications SET isStarred = :isStarred WHERE id = :id")
     suspend fun setStarred(id: Long, isStarred: Boolean)
